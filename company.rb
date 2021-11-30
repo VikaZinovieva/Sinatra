@@ -1,8 +1,6 @@
 require 'sinatra'
 require_relative 'models'
 require 'sinatra/activerecord'
-# require 'sinatra/json'
-# require 'json'
 
 set :database, { adapter: 'sqlite3', database: 'development.sqlite3' }
 
