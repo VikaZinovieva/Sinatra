@@ -6,7 +6,6 @@ set :database, { adapter: 'sqlite3', database: 'development.sqlite3' }
 
 
 get '/locations' do
-  # return Locations.all.map{ |l| l.to_json}
   Locations.all.to_json
 end
 
