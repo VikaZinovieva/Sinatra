@@ -8,6 +8,3 @@ end
 
 class Projects < ActiveRecord::Base
 end
-
-class Auth < ActiveRecord::Base
-end

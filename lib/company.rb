@@ -1,12 +1,12 @@
 require 'sinatra'
-require_relative 'models'
+require_relative '../models/models'
 require 'sinatra/activerecord'
-require_relative 'tools/db_controller'
+require_relative '../tools/db_controller'
 
-set :database, { adapter: 'sqlite3', database: 'development.sqlite3' }
+set :database, { adapter: 'sqlite3', database: '../db/base/development.sqlite3' }
 
 use Rack::Auth::Basic, 'Restricted' do |username, password|
-  [username , password] == %w[superadmin 12345]
+  [username, password] == %w(superadmin 12345)
 end
 
 get '/locations' do
