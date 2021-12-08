@@ -1,125 +1,150 @@
 require 'sinatra'
 require_relative 'models'
 require 'sinatra/activerecord'
+require_relative 'tools/db_controller'
 
 set :database, { adapter: 'sqlite3', database: 'development.sqlite3' }
 
+use Rack::Auth::Basic, 'Restricted' do |username, password|
+  [username , password] == %w[superadmin 12345]
+end
+
 get '/locations' do
-  Locations.all.to_json
+  DBController.locations
 end
 
 get '/projects' do
-  Projects.all.to_json
+  DBController.projects
 end
 
 get '/employees' do
-  Employees.all.to_json
+  DBController.employees
 end
 
-get '/locations/:id' do |id|
-  location = Locations.find(id)
-  location.attributes.to_json
+get '/locations/:id' do
+  DBController.find_location_by({ id: params['id'] })
 end
 
-get '/employees/:id' do |id|
-  employee = Employees.find(id)
-  employee.attributes.to_json
+get '/locations/:name' do
+  DBController.find_location_by({ name: params['name'] })
 end
 
-get '/projects/:id' do |id|
-  project = Projects.find(id)
-  project.attributes.to_json
+get '/projects/:id' do
+  DBController.find_project_by({ id: params['id'] })
 end
 
-get '/projects/:name' do |name|
-  project = Projects.find(name)
-  project.attributes.to_json
+get '/projects/:name' do
+  DBController.find_project_by({ name: params['name'] })
 end
 
-get '/locations/:name' do |name|
-  location = Locations.find(name)
-  location.attributes.to_json
+get '/employees/:id' do
+  DBController.find_employee_by({ id: params['id'] })
 end
 
-get '/employees/:name' do |name|
-  employee = Employees.find(name)
-  employee.attributes.to_json
+get '/employees/:name' do
+  DBController.find_employee_by({ name: params['name'] })
+end
+
+get '/employees/:surname' do
+  DBController.find_employee_by({ surname: params['surname'] })
 end
 
 post '/locations' do
-  location = Locations.create(params[:location])
-  status 201
+  begin
+    DBController.create_location(params[:location])
+    status 201
+  rescue StandardError => e
+    puts "StandardError #{e.message}"
+  end
 end
 
 post '/employees' do
-  employee = Employees.create(params[:employee])
-  status 201
+  begin
+    DBController.create_employee(params[:employee])
+    status 201
+  rescue StandardError => e
+    puts "StandardError #{e.message}"
+  end
 end
 
 post '/projects' do
-  project = Projects.create(params[:project])
-  status 201
+  begin
+    DBController.create_project(params[:project])
+    status 201
+  rescue StandardError => e
+    puts "StandardError #{e.message}"
+  end
 end
 
 patch '/locations/:name' do
-  location = Locations.find_by(name: params['name'])
-  location.update(name: params['name_new'])
-  status 200
+  begin
+    DBController.edit_location({ name: params['name'] }, { name: params['name_new'] })
+    status 200
+  rescue StandardError => e
+    puts "StandardError #{e.message}"
+  end
+end
+
+patch '/projects/:name' do
+  begin
+    DBController.edit_project({ name: params['name'] }, { name: params['name_new'] })
+    status 200
+  rescue StandardError => e
+    puts "StandardError #{e.message}"
+  end
 end
 
 patch '/employees/:name' do
-  employee = Employees.find_by(name: params['name'])
-  employee.update(name: params['name_new'])
-  status 200
+  begin
+    DBController.edit_employee_by({ name: params['name'] }, { name: params['name_new'] })
+    status 200
+  rescue StandardError => e
+    puts "StandardError #{e.message}"
+  end
 end
 
 patch '/employees/:surname' do
-  employee = Employees.find_by(surname: params['surname'])
-  employee.update(surname: params['surname_new'])
-  status 200
+  begin
+    DBController.edit_employee_by({ surname: params['surname'] }, { surname: params['surname_new'] })
+    status 200
+  rescue StandardError => e
+    puts "StandardError #{e.message}"
+  end
 end
 
 patch '/employees/:email' do
-  employee = Employees.find_by(email: params['email'])
-  employee.update(name: params['email_new'])
-  status 200
-end
-
-delete '/locations/:name' do
-  location = Locations.where(name: params['name'])
-  location.destroy_all
-  status 200
+  begin
+    DBController.edit_employee_by({ email: params['email'] }, { name: params['email_new'] })
+    status 200
+  rescue StandardError => e
+    puts "StandardError #{e.message}"
+  end
 end
 
 delete '/employees/:surname' do
-  employee = Employees.where(surname: params['surname'])
-  employee.destroy_all
-  status 200
+  begin
+    DBController.delete_employee({ surname: params['surname'] })
+    status 200
+  rescue NoMethodError => e
+    puts "NoMethodError #{e.message}"
+  end
 end
 
 delete '/projects/:name' do
   begin
-    project = Projects.find_by(name: params['name'])
-    project_new = Projects.find_by(name: params['name_new'])
-    employeess = Employees.where(id_project_id: project['id'])
+    DBController.delete_project({ name: params['name'] }, { name: params['name_new'] })
+    status 200
   rescue NoMethodError => e
     puts "NoMethodError #{e.message}"
   end
-  employeess.update_all(id_project_id: project_new['id'])
-  project = Projects.where(name: params['name'])
-  project.destroy_all
 end
 
 delete '/locations/:name' do
   begin
-    location = Locationss.find_by(name: params['name'])
-    location_new = Locations.find_by(name: params['name_new'])
-    employeess = Employees.where(id_location_id: location['id'])
+    DBController.delete_location({ name: params['name'] }, { name: params['name_new'] })
+    status 200
   rescue NoMethodError => e
     puts "NoMethodError #{e.message}"
-    employeess.update_all(id_location_id: location_new['id'])
-    location = Locations.where(name: params['name'])
-    location.destroy_all
   end
 end
 
