@@ -78,7 +78,7 @@ end
 
 patch '/locations/:name' do
   begin
-    DBController.edit_location({ name: params['name'] }, { name: params['name_new'] })
+    DBController.edit_location({ name: params['name'] }, { name: params['new_name'] })
     status 200
   rescue StandardError => e
     puts "StandardError #{e.message}"
@@ -87,7 +87,7 @@ end
 
 patch '/projects/:name' do
   begin
-    DBController.edit_project({ name: params['name'] }, { name: params['name_new'] })
+    DBController.edit_project({ name: params['name'] }, { name: params['new_name'] })
     status 200
   rescue StandardError => e
     puts "StandardError #{e.message}"
@@ -96,7 +96,7 @@ end
 
 patch '/employees/:name' do
   begin
-    DBController.edit_employee_by({ name: params['name'] }, { name: params['name_new'] })
+    DBController.edit_employee_by({ name: params['name'] }, { name: params['new_name'] })
     status 200
   rescue StandardError => e
     puts "StandardError #{e.message}"
@@ -105,7 +105,7 @@ end
 
 patch '/employees/:surname' do
   begin
-    DBController.edit_employee_by({ surname: params['surname'] }, { surname: params['surname_new'] })
+    DBController.edit_employee({ surname: params['surname'] }, { surname: params['new_surname'] })
     status 200
   rescue StandardError => e
     puts "StandardError #{e.message}"
@@ -114,7 +114,7 @@ end
 
 patch '/employees/:email' do
   begin
-    DBController.edit_employee_by({ email: params['email'] }, { name: params['email_new'] })
+    DBController.edit_employee({ email: params['email'] }, { name: params['new_email'] })
     status 200
   rescue StandardError => e
     puts "StandardError #{e.message}"
@@ -132,7 +132,7 @@ end
 
 delete '/projects/:name' do
   begin
-    DBController.delete_project({ name: params['name'] }, { name: params['name_new'] })
+    DBController.delete_project({ name: params['name'] }, { name: params['new_name'] })
     status 200
   rescue NoMethodError => e
     puts "NoMethodError #{e.message}"
@@ -141,10 +141,9 @@ end
 
 delete '/locations/:name' do
   begin
-    DBController.delete_location({ name: params['name'] }, { name: params['name_new'] })
+    DBController.delete_location({ name: params['name'] }, { name: params['new_name'] })
     status 200
   rescue NoMethodError => e
     puts "NoMethodError #{e.message}"
   end
 end
-
