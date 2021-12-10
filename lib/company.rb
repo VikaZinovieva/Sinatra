@@ -52,7 +52,7 @@ end
 post '/locations' do
   begin
     DBController.create_location(params[:location])
-    status 201
+
   rescue StandardError => e
     puts "StandardError #{e.message}"
   end
@@ -96,7 +96,7 @@ end
 
 patch '/employees/:name' do
   begin
-    DBController.edit_employee_by({ name: params['name'] }, { name: params['new_name'] })
+    DBController.edit_employee({ name: params['name'] }, { name: params['new_name'] })
     status 200
   rescue StandardError => e
     puts "StandardError #{e.message}"
