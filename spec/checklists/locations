@@ -1,63 +1,65 @@
 1.GET Method
 Valid request:
  1.1 Verify GET/locations response include list of all locations
- 1.2 Verify GET/locations status code is 201
- 1.3 Verify GET/location/:id response include required information of location(id, name, description) in response
- 1.4 Verify GET/locations/:id status code is 201
- 1.5 Verify GET/location/:name response include required information of location(id, name, description)
- 1.6 Verify GET/locations/:name status code is 201
+ 1.2 Verify GET/locations returns status code 200
+ 1.3 Verify GET/locations/:name in response are required information of location(id, name, description)
+ 1.4 Verify GET/locations/:name returns status code 200
 
  Invalid request:
- 1.7 Verify authorized user GET/locations/:id(non-exist id, float number, negative number, number and special characters/letters, location that was deleted, empty, null) status code is 404
- 1.8 Verify authorized user GET/locations/:name(non-exist name, deleted/changed, empty, length less 2, length more 1000) status code is 404
- 1.9 Verify non-authorized user GET/locations status code is 401
- 1.10 Verify non-authorized user GET/locations/:id status code is 401
- 1.11 Verify non-authorized user GET/location/:name status code is 401
-
+ 1.5 Verify GET/locations/:name for authorized user with parameter name: non-exist, deleted/changed, empty, length less 2, length more 1000 returns status code 400
+ 1.6 Verify GET/locations for non-authorized user returns status code 401
+ 1.7 Verify GET/locations/:name for non-authorized user returns status code 401
+ 1.8 Verify GET/locations/:name for user with valid username and invalid password returns status code 401
+ 1.9 Verify GET/locations/:name for user with invalid username and valid password returns status code 401
+ 1.10 Verify GET/locations/:name for user with invalid username and password returns status code 401
 
  2.POST Method
  Valid request:
- 2.1 Verify POST/locations responce include all created data(name, description)
- 2.2 Verify POST/locations status code is 201
- 2.3 Verify POST/location length name 5 &  length description 1000 status code 201
- 2.4 Verify POST/location length name 1000 &  length description 5 status code 201
- 2.5 Verify POST/location length name (rand between  5..1000) &  length description (rand between 5..1000)status code 201
-
+ 2.1 Verify POST/locations for authorized user create location with data(name, description)
+ 2.2 Verify POST/locations for authorized user returns status code 201
+ 2.3 Verify POST/locations for authorized user with length of name 5 characters and length of description 1000 characters create location and returns status code 201
+ 2.4 Verify POST/locations for authorized user with length of name 1000 characters and length of description 5 characters create location and returns status code 201
+ 2.5 Verify POST/locations for authorized user with length of name 5-1000 characters and length of description 5-1000 characters create location and returns status code 201
 
  Invalid request:
- 2.6 Verify authorized user POST/locations response(name: empty, length less 2 and more 1000 characters) status code is 400
- 2.7 Verify authorized user POST/location length name less than 5 & length description 1000 status code 400
- 2.8 Verify authorized user POST/location length name 5 &  length description less 5 status code 400
- 2.9 Verify authorized user POST/location length name & description less 5 status code 400
- 2.10 Verify authorized user POST/location length name & description  more 1000 status code 400
- 2.11 Verify authorized user POST/location empty name 5 &  length description 1000 status code 400
- 2.12 Verify authorized user POST/location length name 5 &  empty description  status code 400
- 2.13 Verify authorized user POST/location name & description  empty status code 400
- 2.14 Verify non-authorized user POST/location length name 5..1000 &(and)  length description 5..1000  status code 401
- 2.15 Verify authorized user POST/location name & description  empty status code 401
-
+ 2.6 Verify POST/locations for authorized user with parameter name: empty, length less 2 and more 1000 characters doesn't create a location and returns status code 400
+ 2.7 Verify POST/locations for authorized user with parameters: length of name less than 5 characters and length description 1000 characters doesn't create a location and returns status code 400
+ 2.8 Verify POST/locations for authorized user with parameters: length of name 5 characters and length of description less 5 characters doesn't create a location and returns status code 400
+ 2.9 Verify POST/locations for authorized user with parameters: length of name and description less 5 characters doesn't create a location and returns status code 400
+ 2.10 Verify POST/locations for authorized user with parameters: length of name and description  more than 1000 characters doesn't create a location and returns status code 400
+ 2.11 Verify POST/locations for authorized user with parameters: empty name and length of description 1000 characters doesn't create a location and returns status code 400
+ 2.12 Verify POST/locations for authorized user with parameters: length of name 5 characters and empty description doesn't create a location and returns status code 400
+ 2.13 Verify POST/locations for authorized user with parameters: empty name and description doesn't create a location and returns status code 400
+ 2.14 Verify POST/locations for non-authorized user with parameters: length of name 5-1000 characters and length of description 5-1000 characters doesn't create a location and returns status code 401
+ 2.15 Verify POST/locations for non-authorized user with parameters: empty name and description doesn't create a location and returns status code 401
+ 2.16 Verify POST/locations for user with valid username and invalid password with parameters: length of name 5-1000 characters and length description 5-1000 characters doesn't create a location returns status code 401
+ 2.17 Verify POST/locations for user with invalid username and valid password with parameters: length of name 5-1000 characters and length of description 5-1000 characters doesn't create a location returns status code 401
+ 2.18 Verify POST/locations for user with invalid username and password with parameters: length of name 5-1000 characters  and length of description 5-1000 characters doesn't create a location returns status code 401
+ 2.19 Verify POST/locations for authorized user with parameter description: empty, length 5-1000 characters, length less 5 characters, length more than 1000 characters doesn't create a location and returns status code 400
 
  3.PATCH Method
  Valid request:
- 3.1 Verify PATCH/locations/name responce include new_name
- 3.2 Verify PATCH/locations/name status code 200
- 3.3 Verify PATCH/locations/name responce include new_name with length 5-1000(symbols)
- 3.4 Verify PATCH/locations/name responce include new_name with length 5-1000 status code 200
-
+ 3.1 Verify PATCH/locations/:name for authorized user with new_name updates a location
+ 3.2 Verify PATCH/locations/:name for authorized user responce returns status code 200
+ 3.3 Verify PATCH/locations/:name for authorized user with length of new_name 5-1000 characters updates a location returns status code 200
 
  Invalid request:
- 3.5 Verify authorized user PATCH/locations/name responce length new_name(empty/less 5/more 100 status code) status code is 400
- 3.6 Verify non-authorized user PATCH/locations/name responce include new_name with length 5-1000 status code 401
- 3.7 Verify non-authorized user PATCH/locations/name responce include new_name with length less 5, more 1000, empty status code 401
-
+ 3.4 Verify PATCH/locations/:name for authorized user with with parameter new_name: empty, length less 5 characters, length more 1000 characters doesn't update a location and returns status code 400
+ 3.5 Verify PATCH/locations/:name for non-authorized user with with parameter new_name: length 5-1000 characters doesn't update a location and returns status code 401
+ 3.6 Verify PATCH/locations/:name for non-authorized user with with parameter new_name: length less 5 characters, more 1000 characters, empty doesn't update a location and returns status code 401
+ 3.7 Verify PATCH/locations/:name for user with valid username and invalid password with parameter new_name: length less 5 characters, more 1000 characters, empty doesn't update a location and returns status code 401
+ 3.8 Verify PATCH/locations/:name for user with invalid username and valid password with parameter new_name: length less 5 characters, more 1000 characters, empty doesn't update a location and returns status code 401
+ 3.9 Verify PATCH/locations/:name for user with invalid username and password with parameter new_name: length less 5 characters, more 1000 characters, empty doesn't update a location and returns status code 401
 
 4.DELETE Method
-Valid request:
- 4.1 Verify DELETE/locations/name request with name that will be deleted from db and replaced on new_name
- 4.2 Verify DELETE/locations/name with valid parameters status code 200
-
+ Valid request:
+ 4.1 Verify DELETE/locations/:name with parameter new_name of location for replace, deletes location with name and replaced on new_name location for employees which has deleted location
+ 4.2 Verify DELETE/locations/:name with valid parameters status code 200
 
  Invalid request:
- 4. Verify authorized user DELETE/locations/name request with name non-exist in db status code 400?
- 4. Verify non-authorized user DELETE/locations/name responce include new_name non-exist in db RETURNS status code 401
-
+ 4.3 Verify DELETE/locations/:name for authorized user with name non-exist in database status code 400
+ 4.4 Verify DELETE/locations/:name for authorized user with same name and new_name returns status code 400
+ 4.5 Verify DELETE/locations/:name for non-authorized user with new_name non-exist in database returns status code 401
+ 4.6 Verify DELETE/locations/:name for user with valid username and invalid password with new_name non-exist in database returns status code 401
+ 4.7 Verify DELETE/locations/:name for user with invalid username and valid password with new_name non-exist in database returns status code 401
+ 4.8 Verify DELETE/locations/:name for user with invalid username and password with new_name non-exist in database returns status code 401

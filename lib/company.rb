@@ -2,6 +2,7 @@ require 'sinatra'
 require_relative '../models/models'
 require 'sinatra/activerecord'
 require_relative '../tools/db_controller'
+require 'pry'
 
 set :database, { adapter: 'sqlite3', database: '../db/base/development.sqlite3' }
 
@@ -21,40 +22,48 @@ get '/employees' do
   DBController.employees
 end
 
-get '/locations/:id' do
-  DBController.find_location_by({ id: params['id'] })
-end
-
 get '/locations/:name' do
-  DBController.find_location_by({ name: params['name'] })
-end
-
-get '/projects/:id' do
-  DBController.find_project_by({ id: params['id'] })
+  begin
+    DBController.find_location_by({ name: params['name'] })
+  rescue StandardError => e
+    body "Location Not Found #{e.message}"
+    status 404
+  end
 end
 
 get '/projects/:name' do
-  DBController.find_project_by({ name: params['name'] })
-end
-
-get '/employees/:id' do
-  DBController.find_employee_by({ id: params['id'] })
+  begin
+    DBController.find_project_by({ name: params['name'] })
+  rescue StandardError => e
+    body "Project Not Found #{e.message}"
+    status 404
+  end
 end
 
 get '/employees/:name' do
-  DBController.find_employee_by({ name: params['name'] })
+  begin
+    DBController.find_employee_by({ name: params['name'] })
+  rescue StandardError => e
+    body "Employee Not Found #{e.message}"
+    status 404
+  end
 end
 
 get '/employees/:surname' do
-  DBController.find_employee_by({ surname: params['surname'] })
+  begin
+    DBController.find_employee_by({ surname: params['surname'] })
+  rescue StandardError => e
+    body "Employee Not Found #{e.message}"
+    status 404
+  end
 end
 
 post '/locations' do
   begin
     DBController.create_location(params[:location])
-
+    status 201
   rescue StandardError => e
-    puts "StandardError #{e.message}"
+    body "Location Not Created #{e.message}"
   end
 end
 
@@ -63,7 +72,7 @@ post '/employees' do
     DBController.create_employee(params[:employee])
     status 201
   rescue StandardError => e
-    puts "StandardError #{e.message}"
+    body "Employee Not Created #{e.message}"
   end
 end
 
@@ -72,52 +81,67 @@ post '/projects' do
     DBController.create_project(params[:project])
     status 201
   rescue StandardError => e
-    puts "StandardError #{e.message}"
+    body "Project Not Created #{e.message}"
   end
 end
 
 patch '/locations/:name' do
   begin
-    DBController.edit_location({ name: params['name'] }, { name: params['new_name'] })
+    request = Rack::Request.new env
+    body = JSON.parse(request.body.read)
+    DBController.edit_location({ name: params['name'] }, { name: body['new_name'] })
     status 200
   rescue StandardError => e
-    puts "StandardError #{e.message}"
+    body "Location Not Updated #{e.message}"
+    status 400
   end
 end
 
 patch '/projects/:name' do
   begin
-    DBController.edit_project({ name: params['name'] }, { name: params['new_name'] })
+    request = Rack::Request.new env
+    body = JSON.parse(request.body.read)
+    DBController.edit_project({ name: params['name'] }, { name: body['new_name'] })
     status 200
   rescue StandardError => e
-    puts "StandardError #{e.message}"
+    body "Project Not Updated #{e.message}"
+    status 400
   end
 end
 
 patch '/employees/:name' do
   begin
-    DBController.edit_employee({ name: params['name'] }, { name: params['new_name'] })
+    request = Rack::Request.new env
+    body = JSON.parse(request.body.read)
+    DBController.edit_employee({ name: params['name'] }, { name: body['new_name'] })
     status 200
   rescue StandardError => e
-    puts "StandardError #{e.message}"
+    body "Employee' Name Not Updated #{e.message}"
+    status 400
   end
 end
 
 patch '/employees/:surname' do
   begin
-    DBController.edit_employee({ surname: params['surname'] }, { surname: params['new_surname'] })
+    request = Rack::Request.new env
+    body = JSON.parse(request.body.read)
+    DBController.edit_employee({ surname: params['surname'] }, { surname: body['new_surname'] })
     status 200
   rescue StandardError => e
-    puts "StandardError #{e.message}"
+    body "Employee' Surname Not Updated #{e.message}"
+    status 400
   end
 end
 
 patch '/employees/:email' do
   begin
-    DBController.edit_employee({ email: params['email'] }, { name: params['new_email'] })
+    request = Rack::Request.new env
+    body = JSON.parse(request.body.read)
+    DBController.edit_employee({ email: params['email'] }, { email: body['new_email'] })
     status 200
   rescue StandardError => e
-    puts "StandardError #{e.message}"
+    body "Employee' Email Not Updated #{e.message}"
+    status 400
   end
 end
 
@@ -126,24 +150,31 @@ delete '/employees/:surname' do
     DBController.delete_employee({ surname: params['surname'] })
     status 200
   rescue NoMethodError => e
-    puts "NoMethodError #{e.message}"
+    body "Employee Not Deleted #{e.message}"
+    status 400
   end
 end
 
 delete '/projects/:name' do
   begin
-    DBController.delete_project({ name: params['name'] }, { name: params['new_name'] })
+    request = Rack::Request.new env
+    body = JSON.parse(request.body.read)
+    DBController.delete_project({ name: params['name'] }, { name: body['new_name'] })
     status 200
   rescue NoMethodError => e
-    puts "NoMethodError #{e.message}"
+    body "Project Not Deleted #{e.message}"
+    status 400
   end
 end
 
 delete '/locations/:name' do
   begin
-    DBController.delete_location({ name: params['name'] }, { name: params['new_name'] })
+    request = Rack::Request.new env
+    body = JSON.parse(request.body.read)
+    DBController.delete_location({ name: params['name'] }, { name: body['new_name'] })
     status 200
   rescue NoMethodError => e
-    puts "NoMethodError #{e.message}"
+    body "Location Not Deleted #{e.message}"
+    status 400
   end
 end
