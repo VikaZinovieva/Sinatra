@@ -2,7 +2,6 @@ require 'sinatra'
 require_relative '../models/models'
 require 'sinatra/activerecord'
 require_relative '../tools/db_controller'
-require 'pry'
 
 set :database, { adapter: 'sqlite3', database: '../db/base/development.sqlite3' }
 
@@ -60,28 +59,36 @@ end
 
 post '/locations' do
   begin
-    DBController.create_location(params[:location])
-    status 201
+    request = Rack::Request.new env
+    body = JSON.parse(request.body.read)
+    DBController.create_location({ name: body['name'], description: body['description'] })
   rescue StandardError => e
     body "Location Not Created #{e.message}"
+    status 400
   end
 end
 
 post '/employees' do
   begin
-    DBController.create_employee(params[:employee])
+    request = Rack::Request.new env
+    body = JSON.parse(request.body.read)
+    DBController.create_employee({ name: body['name'], surname: body['surname'], email: body['email'], position: body['position'] })
     status 201
   rescue StandardError => e
     body "Employee Not Created #{e.message}"
+    status 400
   end
 end
 
 post '/projects' do
   begin
-    DBController.create_project(params[:project])
+    request = Rack::Request.new env
+    body = JSON.parse(request.body.read)
+    DBController.create_project({ name: body['name'], description: body['description'] })
     status 201
   rescue StandardError => e
     body "Project Not Created #{e.message}"
+    status 400
   end
 end
 
@@ -89,7 +96,7 @@ patch '/locations/:name' do
   begin
     request = Rack::Request.new env
     body = JSON.parse(request.body.read)
-    DBController.edit_location({ name: params['name'] }, { name: body['new_name'] })
+    DBController.edit_location({ name: params['name'] }, { name: body['new_name'] }) # description: body['new_description']
     status 200
   rescue StandardError => e
     body "Location Not Updated #{e.message}"

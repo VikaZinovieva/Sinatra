@@ -1,13 +1,9 @@
 require_relative '../spec_helper'
 require 'securerandom'
 
-RSpec.describe 'GET /locations' do
-  api_client = ApiClient.new
-  locations = JSON.parse(api_client.locations.body)
-
-  before (:all) do
-    locations = JSON.parse(api_client.locations.body)
-  end
+RSpec.describe 'GET/locations' do
+  let(:api_client) { ApiClient.new }
+  locations = JSON.parse(ApiClient.new.locations.body)
 
   context 'when valid  request' do
     it 'verifies response include all keys of locations' do
@@ -33,7 +29,6 @@ RSpec.describe 'GET /locations' do
       random_name: SecureRandom.hex(10),
       less_2_symbols: SecureRandom.hex(1),
       more_1000_symbols: SecureRandom.hex(1001)
-      #empty: ''
     }
 
     invalid_names.each do |invalid_type, value|
@@ -69,5 +64,5 @@ RSpec.describe 'GET /locations' do
     end
   end
 
-  it_behaves_like 'non-authorized user', api_client
+  it_behaves_like 'non-authorized user'
 end
