@@ -54,7 +54,7 @@ class DBController
       employee.update(opts_new)
     end
 
-    def delete_location(find_opts, new_opts)
+    def delete_location(find_opts, new_opts = nil)
       location = Locations.find_by(find_opts)
       location_new = Locations.find_by(new_opts)
       self.update_employee(:id_location_id, location['id'], location_new['id'])

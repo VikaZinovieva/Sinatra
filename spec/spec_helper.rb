@@ -1,0 +1,8 @@
+require 'rspec'
+require 'pry'
+require 'json'
+require 'faraday'
+require_relative 'helper/api_client'
+require 'rake'
+require 'securerandom'
+require_relative 'non_authorized_user_shared_examples'
