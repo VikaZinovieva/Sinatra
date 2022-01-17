@@ -1,0 +1,65 @@
+1.GET Method
+ Valid request:
+ Verify GET/employees response include list of all employees
+ Verify GET/employees returns status code 200
+ Verify GET/employees/:id in response are required information of employee(id, name, surname, email, id location, id project)
+ Verify GET/employees/:name in response are required information of employee(id, name, surname, email, id location, id project)
+ Verify GET/employees/:surname in response are required information of employee(id, name, surname, email, id location, id project)
+ Verify GET/employees/:id returns status code 200
+ Verify GET/employees/:name returns status code 200
+ Verify GET/employees/:surname returns status code 200
+
+ Invalid request:
+ Verify GET/employees/:name for authorized user with parameter name: non-exist, deleted/changed, empty status code 400
+ Verify GET/employees/:surname for authorized user with parameter name: non-exist, deleted/changed, empty status code 400
+ Verify GET/employees for non-authorized user returns status code 401
+ Verify GET/employees/:name for non-authorized user returns status code 401
+ Verify GET/employees/:surname for non-authorized user returns status code 401
+ Verify GET/employees/:name for user with valid username and invalid password returns status code 401
+ Verify GET/employees/:surname for user with valid username and invalid password returns status code 401
+ Verify GET/employees/:name for user with invalid username and valid password returns status code 401
+ Verify GET/employees/:surname for user with invalid username and valid password returns status code 401
+ Verify GET/employees/:name for user with invalid username and password returns status code 401
+ Verify GET/employees/:surname for user with invalid username and password returns status code 401
+
+ 2.POST Method
+ Valid request:
+ Verify POST/employees for authorized user create employee with data(id, name, surname, email, id location, id project)
+ Verify POST/employees for authorized user returns status code 201
+
+ Invalid request:
+ Verify POST/employees for authorized user with parameter name and without surname, email, position doesn't create employee and returns status code 400
+ Verify POST/employees for authorized user with parameter surname and without name, email, position doesn't create employee and returns status code 400
+ Verify POST/employees for authorized user with valid parameter email and without name, surname, position doesn't create employee and returns status code 400
+ Verify POST/employees for authorized user with parameter position and without name, surname, email doesn't create employee and returns status code 400
+ Verify POST/employees for authorized user with parameter name, surname, email and without position doesn't create employee and returns status code 400
+ Verify POST/employees for authorized user with parameter name, surname, position and without email doesn't create employee and returns status code 400
+ Verify POST/employees for authorized user with parameter name, surname and without position and email doesn't create employee and returns status code 400
+ Verify POST/employees for authorized user with parameter name, surname and without position and email doesn't create employee and returns status code 400
+ Verify POST/employees for authorized user with valid parameter email and position and without name, surname doesn't create employee and returns status code 400
+ Verify POST/employees for authorized user with invalid parameter email(no @ character, more than one @, double dot after @, double dot before @, special characters in local part outside quotation marks, spaces, quotes, and backslashes without quotes, a valid address with leading space and trailing space) and with name, surname, position doesn't create employee and returns status code 400
+
+ 3.PATCH Method
+ Valid request:
+ Verify PATCH/employees/:surname for authorized user with new_surname updates employee and returns status code 200
+ Verify PATCH/employees/:surname for authorized user with new_email updates employee and returns status code 200
+ Verify PATCH/employees/:surname for authorized user responce returns status code 200
+
+ Invalid request:
+ Verify PATCH/employees/:surname for authorized user with with empty parameter new_name doesn't update employee and returns status code 400
+ Verify PATCH/employees/:surname for non-authorized user with with empty parameter new_surname doesn't update employee and returns status code 401
+ Verify PATCH/employees/:surname for non-authorized user with with parameter new_email:(no @ character, more than one @, double dot after @, double dot before @, special characters in local part outside quotation marks, spaces, quotes, and backslashes without quotes, a valid address with leading space and trailing space.empty) doesn't update employee and returns status code 401
+ Verify PATCH/employees/:surname for user with valid username and invalid password with empty parameter new_name doesn't update employee and returns status code 401
+ Verify PATCH/employees/:surname for user with invalid username and valid password with empty  parameter new_surname doesn't update employee and returns status code 401
+ Verify PATCH/employees/:surname for user with invalid username and password with valid new_email doesn't update project and returns status code 401
+
+4.DELETE Method
+ Valid request:
+ Verify DELETE/employees/:surname for authorized user deletes employee
+ Verify DELETE/employees/:surname for authorized user responce returns status code 200
+
+ Invalid request:
+ Verify DELETE/employees/:surname for authorized user with name non-exist in database status code 400
+ Verify DELETE/employees/:surname for non-authorized user with new_name non-exist in database returns status code 401
+ Verify DELETE/employees/:surname for user with valid username and invalid password with surname non-exist in database returns status code 401
+ Verify DELETE/employees/:surname for user with invalid username and valid password with surname non-exist in database returns status code 401

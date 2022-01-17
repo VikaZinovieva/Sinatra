@@ -1,0 +1,67 @@
+1.GET Method
+ Valid request:
+ Verify GET/projects response include list of all projects
+ Verify GET/projects returns status code 200
+ Verify GET/projects/:name in response are required information of project(id, name, description)
+ Verify GET/projects/:name returns status code 200
+
+ Invalid request:
+ Verify GET/projects/:name for authorized user with parameter name: non-exist, deleted/changed, empty, length less 2, length more 1000 returns status code 400
+ Verify GET/projects for non-authorized user returns status code 401
+ Verify GET/projects/:name for non-authorized user returns status code 401
+ Verify GET/projects/:name for user with valid username and invalid password returns status code 401
+ Verify GET/projects/:name for user with invalid username and valid password returns status code 401
+ Verify GET/projects/:name for user with invalid username and password returns status code 401
+
+ 2.POST Method
+ Valid request:
+ Verify POST/projects for authorized user create location with data(name, description)
+ Verify POST/projects for authorized user returns status code 201
+ Verify POST/projects for authorized user with length of name 5 characters and length of description 1000 characters create project and returns status code 201
+ Verify POST/projects for authorized user with length of name 1000 characters and length of description 5 characters create project and returns status code 201
+ Verify POST/projects for authorized user with length of name 5-1000 characters and length of description 5-1000 characters create project and returns status code 201
+
+ Invalid request:
+ Verify POST/projects for authorized user with parameter name: empty, length less 2 and more 1000 characters doesn't create project and returns status code 400
+ Verify POST/projects for authorized user with parameters: length of name less than 5 characters and length description 1000 characters doesn't create project and returns status code 400
+ Verify POST/projects for authorized user with parameters: length of name 5 characters and length of description less 5 characters doesn't create project and returns status code 400
+ Verify POST/projects for authorized user with parameters: length of name and description less 5 characters doesn't create project and returns status code 400
+ Verify POST/projects for authorized user with parameters: length of name and description  more than 1000 characters doesn't create project and returns status code 400
+ Verify POST/projects for authorized user with parameters: empty name and length of description 1000 characters doesn't create projects and returns status code 400
+ Verify POST/projects for authorized user with parameters: length of name 5 characters and empty description doesn't create projects and returns status code 400
+ Verify POST/projects for authorized user with parameters: empty name and description doesn't create project and returns status code 400
+ Verify POST/projects for non-authorized user with parameters: length of name 5-1000 characters and length of description 5-1000 characters doesn't create projects and returns status code 401
+ Verify POST/projects for non-authorized user with parameters: empty name and description doesn't create project and returns status code 401
+ Verify POST/projects for user with valid username and invalid password with parameters: length of name 5-1000 characters and length description 5-1000 characters doesn't create project and returns status code 401
+ Verify POST/projects for user with invalid username and valid password with parameters: length of name 5-1000 characters and length of description 5-1000 characters doesn't create project and returns status code 401
+ Verify POST/projects for user with invalid username and password with parameters: length of name 5-1000 characters  and length of description 5-1000 characters doesn't create project and returns status code 401
+ Verify POST/projects for authorized user with parameter description: empty, length 5-1000 characters, length less 5 characters, length more than 1000 characters doesn't create project and returns status code 400
+
+ 3.PATCH Method
+ Valid request:
+ Verify PATCH/projects/:name for authorized user with new_name updates project
+ Verify PATCH/projects/:name for authorized user responce returns status code 200
+ Verify PATCH/projects/:name for authorized user with length of new_name 5-1000 characters updates project and returns status code 200
+
+ Invalid request:
+ Verify PATCH/projects/:name for authorized user with with parameter new_name: empty, length less 5 characters, length more 1000 characters doesn't update project and returns status code 400
+ Verify PATCH/projects/:name for non-authorized user with with parameter new_name: length 5-1000 characters doesn't update project and returns status code 401
+ Verify PATCH/projects/:name for non-authorized user with with parameter new_name: length less 5 characters, more 1000 characters, empty doesn't update project and returns status code 401
+ Verify PATCH/projects/:name for user with valid username and invalid password with parameter new_name: length less 5 characters, more 1000 characters, empty doesn't update project and returns status code 401
+ Verify PATCH/projects/:name for user with invalid username and valid password with parameter new_name: length less 5 characters, more 1000 characters, empty doesn't update project and returns status code 401
+ Verify PATCH/projects/:name for user with invalid username and password with parameter new_name: length less 5 characters, more 1000 characters, empty doesn't update project and returns status code 401
+
+4.DELETE Method
+ Valid request:
+ Verify DELETE/projects/:name authorized user with parameter new_name of project for replace, deletes project with name and replaced on new_name project for employees which has deleted
+ Verify DELETE/projects/:name with valid parameters status code 200
+ Verify DELETE/projects/:name for authorized user with valid name that unused in employee
+ Verify DELETE/projects/:name for authorized user that unused in employee responce returns status code 200
+
+ Invalid request:
+ Verify DELETE/projects/:name for authorized user with name non-exist in database status code 400
+ Verify DELETE/projects/:name for authorized user with same name and new_name returns status code 400
+ Verify DELETE/projects/:name for non-authorized user with new_name non-exist in database returns status code 401
+ Verify DELETE/projects/:name for user with valid username and invalid password with new_name non-exist in database returns status code 401
+ Verify DELETE/projects/:name for user with invalid username and valid password with new_name non-exist in database returns status code 401
+ Verify DELETE/projects/:name for user with invalid username and password with new_name non-exist in database returns status code 401

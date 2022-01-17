@@ -61,7 +61,7 @@ class DBController
       self.delete_in(Locations, find_opts)
     end
 
-    def delete_project(find_opts, new_opts)
+    def delete_project(find_opts, new_opts = nil)
       project = Projects.find_by(find_opts)
       project_new = Projects.find_by(new_opts)
       self.update_employee(:id_project_id, project['id'], project_new['id'])
