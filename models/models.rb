@@ -3,7 +3,7 @@ require 'sinatra/activerecord'
 class Locations < ActiveRecord::Base
   validates :name, :description, presence: true
   validates :name, uniqueness: true
-  validates :name, :description, length: { in: 5...1000, message: 'invalid length!'}
+  validates :name, :description, length: { within: 5..1000, message: 'invalid length!'}
 end
 
 class Employees < ActiveRecord::Base
@@ -15,5 +15,5 @@ end
 class Projects < ActiveRecord::Base
   validates :name, :description, presence: true
   validates :name, uniqueness: true
-  validates :name, :description, length: { in: 5...1000, message: 'invalid length!'}
+  validates :name, :description, length: { within: 5..1000, message: 'invalid length!'}
 end

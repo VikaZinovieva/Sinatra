@@ -1,6 +1,6 @@
 require_relative 'spec_helper'
 
-RSpec.shared_examples 'non-authorized user' do |api_client|
+RSpec.shared_examples 'non-authorized user' do
   [{ test_type: 'username and invalid password', username: ApiClient::DEFAULT_USERNAME, password: SecureRandom.hex },
    { test_type: 'invalid username and password', username: SecureRandom.hex, password: SecureRandom.hex },
    { test_type: 'swapped username and password', username: ApiClient::DEFAULT_PASSWORD, password: ApiClient::DEFAULT_USERNAME },

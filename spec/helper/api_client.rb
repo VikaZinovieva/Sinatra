@@ -2,6 +2,7 @@ require 'faraday'
 require 'json'
 require_relative '../spec_helper'
 
+
 class ApiClient
   APP_JS = 'application/json'
   DEFAULT_USERNAME = 'superadmin'
