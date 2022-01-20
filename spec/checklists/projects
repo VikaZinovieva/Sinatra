@@ -2,16 +2,25 @@
  Valid request:
  Verify GET/projects response include list of all projects
  Verify GET/projects returns status code 200
- Verify GET/projects/:name in response are required information of project(id, name, description)
- Verify GET/projects/:name returns status code 200
+ Verify GET/projects by name in response are required information of project(id, name, description)
+ Verify GET/projects by id in response are required information of project(id, name, description)
+ Verify GET/projects by name returns status code 200
+ Verify GET/projects by id returns status code 200
 
  Invalid request:
- Verify GET/projects/:name for authorized user with parameter name: non-exist, deleted/changed, empty, length less 2, length more 1000 returns status code 400
+ Verify GET/projects by name for authorized user with invalid name: non-exist, deleted/changed, empty, length less 2, length more 1000 returns status code 400
+ Verify GET/projects by id for authorized user with invalid id: non-exist, deleted, empty returns status code 400
  Verify GET/projects for non-authorized user returns status code 401
- Verify GET/projects/:name for non-authorized user returns status code 401
- Verify GET/projects/:name for user with valid username and invalid password returns status code 401
- Verify GET/projects/:name for user with invalid username and valid password returns status code 401
- Verify GET/projects/:name for user with invalid username and password returns status code 401
+ Verify GET/projects by name for non-authorized user returns status code 401
+ Verify GET/projects by id for non-authorized user returns status code 401
+ Verify GET/projects by name for user with valid username and invalid password returns status code 401
+ Verify GET/projects by name for user with invalid username and valid password returns status code 401
+ Verify GET/projects by name for user with invalid username and password returns status code 401
+ Verify GET/projects by name for user with swapped username and password returns status code 401
+ Verify GET/projects by id for user with valid username and invalid password returns status code 401
+ Verify GET/projects by id for user with invalid username and valid password returns status code 401
+ Verify GET/projects by id for user with invalid username and password returns status code 401
+ Verify GET/projects by id for user with swapped username and password returns status code 401
 
  2.POST Method
  Valid request:
@@ -39,17 +48,20 @@
 
  3.PATCH Method
  Valid request:
- Verify PATCH/projects/:name for authorized user with new_name updates project
+ Verify PATCH/projects/:name for authorized user with new name updates project
+ Verify PATCH/projects/:name for authorized user with new description updates project
  Verify PATCH/projects/:name for authorized user responce returns status code 200
- Verify PATCH/projects/:name for authorized user with length of new_name 5-1000 characters updates project and returns status code 200
+ Verify PATCH/projects/:name for authorized user with length of new name 5-1000 characters updates project and returns status code 200
+ Verify PATCH/projects/:name for authorized user with length of new description 5-1000 characters updates project and returns status code 200
 
  Invalid request:
- Verify PATCH/projects/:name for authorized user with with parameter new_name: empty, length less 5 characters, length more 1000 characters doesn't update project and returns status code 400
- Verify PATCH/projects/:name for non-authorized user with with parameter new_name: length 5-1000 characters doesn't update project and returns status code 401
- Verify PATCH/projects/:name for non-authorized user with with parameter new_name: length less 5 characters, more 1000 characters, empty doesn't update project and returns status code 401
- Verify PATCH/projects/:name for user with valid username and invalid password with parameter new_name: length less 5 characters, more 1000 characters, empty doesn't update project and returns status code 401
- Verify PATCH/projects/:name for user with invalid username and valid password with parameter new_name: length less 5 characters, more 1000 characters, empty doesn't update project and returns status code 401
- Verify PATCH/projects/:name for user with invalid username and password with parameter new_name: length less 5 characters, more 1000 characters, empty doesn't update project and returns status code 401
+ Verify PATCH/projects/:name for authorized user with with parameter name: empty, length less 5 characters, length more 1000 characters doesn't update project and returns status code 400
+ Verify PATCH/projects/:name for non-authorized user with with parameter name: length 5-1000 characters doesn't update project and returns status code 401
+ Verify PATCH/projects/:name for non-authorized user with with parameter name: length less 5 characters, more 1000 characters, empty doesn't update project and returns status code 401
+ Verify PATCH/projects/:name for user with valid username and invalid password doesn't update project and returns status code 401
+ Verify PATCH/projects/:name for user with invalid username and valid password doesn't update project and returns status code 401
+ Verify PATCH/projects/:name for user with invalid username and password project doesn't update and returns status code 401
+ Verify PATCH/projects/:name for user with swapped username and password doesn't update project and returns status code 401
 
 4.DELETE Method
  Valid request:

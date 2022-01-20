@@ -6,7 +6,9 @@ RSpec.describe 'GET/projects' do
   let(:all_records) { JSON.parse(ApiClient.new.company_request(endpoint: 'projects').body) }
 
   it_behaves_like 'non-authorized user'
-  it_behaves_like 'valid get request', 'projects'
+  it_behaves_like 'valid get request', 'projects', 'id'
+  it_behaves_like 'valid get request', 'projects', 'name'
+  it_behaves_like 'invalid get request', 'projects'
   it_behaves_like 'invalid get request', 'projects'
 end
 

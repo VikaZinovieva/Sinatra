@@ -7,7 +7,7 @@ RSpec.shared_examples 'non-authorized user' do
    { test_type: 'username and invalid password', username: SecureRandom.hex, password: ApiClient::DEFAULT_PASSWORD }
   ].each do |data|
     it "verifies #{data[:test_type]} response status code is 401" do
-      response = api_client.locations(username: data[:username], password: data[:password])
+      response = api_client.company_request(auth_opts: { username: data[:username], password: data[:password] })
       expect(response.status).to eq(401)
     end
   end

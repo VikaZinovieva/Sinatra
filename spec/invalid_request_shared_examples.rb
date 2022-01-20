@@ -1,14 +1,13 @@
 require_relative 'spec_helper'
 
 RSpec.shared_examples 'invalid get request' do |endpoint|
-  invalid_names = {
+  { empty_id: '',
+    non_exist_id: Random.new.rand(1..38),
     random_name: SecureRandom.hex(10),
-    less_2_symbols: SecureRandom.hex(1),
-    more_1000_symbols: SecureRandom.hex(1001)
-  }
-
-  invalid_names.each do |invalid_type, value|
-    it "verifies with #{invalid_type} name returns status code 404" do
+    less_5_symbols_name: SecureRandom.hex(4),
+    more_1000_symbols_name: SecureRandom.hex(1001)
+  }.each do |invalid_type, value|
+    it "verifies with #{invalid_type} returns status code 404" do
       response = api_client.company_request(endpoint: endpoint, parameter: value)
       expect(response.reason_phrase).to eq('Not Found')
       expect(response.status).to eq(404)
@@ -21,7 +20,7 @@ RSpec.shared_examples 'invalid post request' do |endpoint|
   [{ test_type: 'name and invalid description', name: SecureRandom.alphanumeric(100), description: SecureRandom.alphanumeric(4) },
    { test_type: 'invalid name and description', name: SecureRandom.alphanumeric(1001), description: SecureRandom.alphanumeric(100) },
    { test_type: 'invalid both name and description', name: SecureRandom.alphanumeric(1001), description: SecureRandom.alphanumeric(3) },
-   { test_type: 'exists in database name', name: random_name["name"], description: SecureRandom.alphanumeric(3) },
+   { test_type: 'exists in database name', name: random_name['name'], description: SecureRandom.alphanumeric(3) },
    { test_type: 'empty name and description', name: '', description: '' }
   ].each do |data|
     it "verifies #{data[:test_type]} don't save record in database" do
@@ -34,37 +33,37 @@ RSpec.shared_examples 'invalid post request' do |endpoint|
   end
 end
 
-RSpec.shared_examples 'invalid patch request' do |endpoint|
-  { less_2_symbols: SecureRandom.hex(1),
-    more_1000_symbols: SecureRandom.hex(1001),
+RSpec.shared_examples 'invalid patch request' do |endpoint, parameter| #parameter = name or description
+  { less_5_symbols: SecureRandom.alphanumeric(4),
+    more_1000_symbols: SecureRandom.alphanumeric(1001),
     empty: ''
   }.each do |invalid_type, value|
     it "verifies with #{invalid_type} name returns status code 404" do
-      name_for_update = random_name['name']
-      api_client.company_request(type_request: :patch, endpoint: endpoint, parameter: name_for_update, body_opts: { "new_name": value })
-      response = api_client.company_request(endpoint: endpoint, parameter: value)
-      response_for_random_name = api_client.company_request(endpoint: endpoint, parameter: name_for_update)
-      expect(response_for_random_name.status).to eq(200)
-      expect(response_for_random_name.body).not_to be_empty
-      expect(response.status).to eq(404)
+      record_for_update = random_record['name']
+      response_patch = api_client.company_request(type_request: :patch, endpoint: endpoint, parameter: record_for_update, body_opts: { "#{parameter}": value })
+      response = api_client.company_request(endpoint: endpoint, parameter: record_for_update)
+      expect(response_patch.status).to eq(200)
+      expect(JSON.parse(response.body)["#{parameter}"]).to eq(random_record["#{parameter}"])
     end
   end
 end
 
-RSpec.shared_examples 'invalid delete request' do |endpoint, id_of|
+RSpec.shared_examples 'invalid delete request' do |endpoint|
+  id_parameter_id = "id_#{endpoint.chomp('s')}_id"
+
   it "verifies delete #{endpoint} non-exist in database returns status code 400" do
     random_location = SecureRandom.alphanumeric(15)
-    exist_location = all_records.sample
-    response = api_client.company_request(type_request: :delete, endpoint: endpoint, parameter: random_location, body_opts: {"new_name": exist_location['name'] })
+    exist_location = all_records.sample['name']
+    response = api_client.company_request(type_request: :delete, endpoint: endpoint, parameter: random_location, body_opts: {"new_name": exist_location })
     expect(response.status).to eq(400)
     expect(response.body).to include('Not Deleted')
     expect(response.reason_phrase).to eq('Bad Request')
   end
 
-  it "verifies delete #{endpoint} location name and new_name are same returns status code 500" do
-    response = api_client.company_request(endpoint: endpoint, parameter: employee["id_#{id_of}_id"])
+  it "verifies delete #{endpoint} name and new_name are same returns status code 500" do
+    response = api_client.company_request(endpoint: endpoint, parameter: employee[id_parameter_id ])
     name_for_delete = JSON.parse(response.body)['name']
     deleted_record = api_client.company_request(endpoint: endpoint, type_request: :delete, parameter: name_for_delete, body_opts: { "new_name": name_for_delete} )
-    expect(deleted_record.status).to eq(400)
+    expect(deleted_record.status).to eq(500)
   end
 end

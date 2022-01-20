@@ -84,8 +84,8 @@ end
 patch '/locations/:name' do
   begin
     request = Rack::Request.new env
-    body = JSON.parse(request.body.read)
-    DBController.edit_location({ name: params['name'] }, { name: body['new_name'] })
+    body = JSON.parse(request.body.read).transform_keys(&:to_sym)
+    DBController.edit_location({ name: params['name'] }, body)
     status 200
   rescue StandardError => e
     body "Location Not Updated #{e.message}"
@@ -96,8 +96,8 @@ end
 patch '/projects/:name' do
   begin
     request = Rack::Request.new env
-    body = JSON.parse(request.body.read)
-    DBController.edit_project({ name: params['name'] }, { name: body['new_name'] })
+    body = JSON.parse(request.body.read).transform_keys(&:to_sym)
+    DBController.edit_project({ name: params['name'] }, body)
     status 200
   rescue StandardError => e
     body "Project Not Updated #{e.message}"
@@ -108,15 +108,14 @@ end
 patch '/employees/:surname' do
   begin
     request = Rack::Request.new env
-    body = JSON.parse(request.body.read)
-    DBController.edit_employee({ surname: params['surname'] }, { surname: body['new_surname'] })
+    body = JSON.parse(request.body.read).transform_keys(&:to_sym)
+    DBController.edit_employee({ surname: params['surname'] }, body)
     status 200
   rescue StandardError => e
     body "Employee' Surname Not Updated #{e.message}"
     status 400
   end
 end
-
 
 delete '/employees/:surname' do
   begin
@@ -132,7 +131,7 @@ delete '/projects/:name' do
   begin
     request = Rack::Request.new env
     body = request.body.read
-    body.empty? ? DBController.delete_project({ name: params['name'] } ) : DBController.delete_project({ name: params['name'] }, { name: body['new_name'] })
+    body.empty? ? DBController.delete_project({ name: params['name'] } ) : DBController.delete_project({ name: params['name'] }, { name: JSON.parse(body)['new_name'] })
     status 200
   rescue NoMethodError => e
     body "Project Not Deleted #{e.message}"
@@ -143,8 +142,8 @@ end
 delete '/locations/:name' do
   begin
     request = Rack::Request.new env
-  body = request.body.read
-  body.empty? ? DBController.delete_location({ name: params['name'] } ) : DBController.delete_location({ name: params['name'] }, { name: body['new_name'] })
+    body = request.body.read
+   body.empty? ? DBController.delete_location({ name: params['name'] } ) : DBController.delete_location({ name: params['name'] }, { name: JSON.parse(body)['new_name'] })
   status 200
   rescue NoMethodError => e
     body "Location Not Deleted #{e.message}"

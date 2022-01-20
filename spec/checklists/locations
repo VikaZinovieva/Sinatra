@@ -2,16 +2,25 @@
  Valid request:
  Verify GET/locations response include list of all locations
  Verify GET/locations returns status code 200
- Verify GET/locations/:name in response are required information of location(id, name, description)
- Verify GET/locations/:name returns status code 200
+ Verify GET/locations by name in response are required information of location(id, name, description)
+ Verify GET/locations by id in response are required information of location(id, name, description)
+ Verify GET/locations by name returns status code 200
+ Verify GET/locations by id returns status code 200
 
  Invalid request:
- Verify GET/locations/:name for authorized user with parameter name: non-exist, deleted/changed, empty, length less 2, length more 1000 returns status code 400
+ Verify GET/locations by name for authorized user with parameter name: non-exist, deleted/changed, empty, length less 2, length more 1000 returns status code 400
+ Verify GET/locations by id for authorized user with parameter name: non-exist, deleted/changed, empty, length less 2, length more 1000 returns status code 400
  Verify GET/locations for non-authorized user returns status code 401
- Verify GET/locations/:name for non-authorized user returns status code 401
- Verify GET/locations/:name for user with valid username and invalid password returns status code 401
- Verify GET/locations/:name for user with invalid username and valid password returns status code 401
- Verify GET/locations/:name for user with invalid username and password returns status code 401
+ Verify GET/locations by name for non-authorized user returns status code 401
+ Verify GET/locations by id for non-authorized user returns status code 401
+ Verify GET/locations by name for user with valid username and invalid password returns status code 401
+ Verify GET/locations by id for user with valid username and invalid password returns status code 401
+ Verify GET/locations by name for user with invalid username and valid password returns status code 401
+ Verify GET/locations by id for user with invalid username and valid password returns status code 401
+ Verify GET/locations by name for user with invalid username and password returns status code 401
+ Verify GET/locations by id for user with invalid username and password returns status code 401
+ Verify GET/locations by id for user with swapped username and password returns status code 401
+ Verify GET/locations by name for user with swapped username and password returns status code 401
 
 2.POST Method
  Valid request:
@@ -39,17 +48,20 @@
 
 3.PATCH Method
  Valid request:
- Verify PATCH/locations/:name for authorized user with new_name updates a location
+ Verify PATCH/locations/:name for authorized user with new name updates a location
+ Verify PATCH/locations/:name for authorized user with new description updates a location
  Verify PATCH/locations/:name for authorized user responce returns status code 200
- Verify PATCH/locations/:name for authorized user with length of new_name 5-1000 characters updates a location returns status code 200
+ Verify PATCH/locations/:name for authorized user with length of new name 5-1000 characters updates a location returns status code 200
+ Verify PATCH/locations/:name for authorized user with length of new description 5-1000 characters updates a location returns status code 200
 
  Invalid request:
- Verify PATCH/locations/:name for authorized user with with parameter new_name: empty, length less 5 characters, length more 1000 characters doesn't update a location and returns status code 400
- Verify PATCH/locations/:name for non-authorized user with with parameter new_name: length 5-1000 characters doesn't update a location and returns status code 401
- Verify PATCH/locations/:name for non-authorized user with with parameter new_name: length less 5 characters, more 1000 characters, empty doesn't update a location and returns status code 401
- Verify PATCH/locations/:name for user with valid username and invalid password with parameter new_name: length less 5 characters, more 1000 characters, empty doesn't update a location and returns status code 401
- Verify PATCH/locations/:name for user with invalid username and valid password with parameter new_name: length less 5 characters, more 1000 characters, empty doesn't update a location and returns status code 401
- Verify PATCH/locations/:name for user with invalid username and password with parameter new_name: length less 5 characters, more 1000 characters, empty doesn't update a location and returns status code 401
+ Verify PATCH/locations/:name for authorized user with with parameter name: empty, length less 5 characters, length more 1000 characters doesn't update a location and returns status code 400
+ Verify PATCH/locations/:name for authorized user with with parameter description: empty, length less 5 characters, length more 1000 characters doesn't update a location and returns status code 400
+ Verify PATCH/locations/:name for non-authorized user with with parameter name doesn't update a location and returns status code 401
+ Verify PATCH/locations/:name for non-authorized user with with parameter description doesn't update a location and returns status code 401
+ Verify PATCH/locations/:name for user with valid username and invalid password with parameter name doesn't update a location and returns status code 401
+ Verify PATCH/locations/:name for user with invalid username and valid password with parameter name doesn't update a location and returns status code 401
+ Verify PATCH/locations/:name for user with invalid username and invalid password with parameter name doesn't update a location and returns status code 401
 
 4.DELETE Method
  Valid request:
