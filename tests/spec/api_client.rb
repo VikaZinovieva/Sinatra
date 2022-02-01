@@ -1,6 +1,6 @@
 require 'faraday'
 require 'json'
-require_relative '../spec_helper'
+require_relative 'spec_helper'
 
 class ApiClient
   APP_JS = 'application/json'
@@ -20,7 +20,7 @@ class ApiClient
 
   def app_request(type, url, body, auth_opts)
     connection = Faraday.new(@base_url)
-    connection.request(:basic_auth,  auth_opts[:username], auth_opts[:password])
+    connection.request(:authorization, :basic,  auth_opts[:username], auth_opts[:password])
     connection.send(type, url) do |req|
       req.headers['Content-Type'] = APP_JS
       req.body = body.to_json unless body.nil?

@@ -1,0 +1,38 @@
+require 'rspec/core/rake_task'
+require 'parallel_tests'
+require 'parallel_tests/tasks'
+require 'rake'
+require 'parallel_tests/cli'
+
+RSpec::Core::RakeTask.new(:all_spec) do |t|
+  t.pattern = Dir.glob('spec/**/*_spec.rb')
+end
+
+RSpec::Core::RakeTask.new(:parallel_get_tests) do |t|
+  rspec_args = ['-t', 'rspec']
+  Dir.glob('spec/**/api_get_*_spec.rb').each { |file| rspec_args << file }
+  ParallelTests::CLI.new.run(rspec_args)
+end
+
+FILES = Dir["spec/**/api_#{ENV['METHOD']}_*_spec.rb"]
+all_tasks = []
+FILES.each do |file_name|
+  splited_path = file_name.split("/")
+  task_name = splited_path[2].delete(".rb")
+  create_task = RSpec::Core::RakeTask.new(task_name.to_sym)
+  create_task.pattern ="spec/#{splited_path[1]}/api_#{ENV['METHOD']}_*_spec.rb,#{file_name.split("/")[2]}"
+  create_task.verbose = false
+  all_tasks << create_task.name
+  create_task.rspec_opts = "--format h > reports/#{ENV['METHOD']}/#{task_name}.html"
+end
+multitask :all_tests => all_tasks
+
+RSpec::Core::RakeTask.new(:get_location) do |t|
+  t.pattern = Dir.glob('spec/locations/api_get_locations_spec.rb')
+end
+
+task :parallel_rspec do |t, args|
+  rspec_args = ['-t', 'rspec', '-n3']
+  Dir.glob("spec/**/api_get_*_spec.rb").each { |f| rspec_args << f }
+  ParallelTests::CLI.new.run(rspec_args)
+end

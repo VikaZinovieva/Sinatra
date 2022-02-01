@@ -1,7 +1,7 @@
 require_relative '../spec_helper'
 require 'securerandom'
 
-RSpec.shared_examples 'invalid get request' do |find_by|
+RSpec.shared_examples 'invalid get request for employee' do |find_by|
   random_employee = JSON.parse(ApiClient.new.company_request(endpoint: 'employees').body).sample
 
   before(:all) { ApiClient.new.company_request(endpoint: 'employees', type_request: :delete, parameter: random_employee['surname']) }
@@ -22,7 +22,9 @@ RSpec.describe 'GET/employees' do
   employees = JSON.parse(ApiClient.new.company_request(endpoint: 'employees').body)
   employee_keys = %w(id name surname email position id_location_id id_project_id)
 
-  context 'when valid  request' do
+  before(:all) { EmployeeHelper.new.post_employee }
+
+  context 'when valid request for employee' do
     it 'verifies response include all keys of employees' do
       employees.each { |record| expect(record.keys).to eq(employee_keys) }
     end
@@ -40,7 +42,7 @@ RSpec.describe 'GET/employees' do
     end
   end
 
-  it_behaves_like 'invalid get request', 'surname'
-  it_behaves_like 'invalid get request', 'name'
+  it_behaves_like 'invalid get request for employee', 'surname'
+  it_behaves_like 'invalid get request for employee', 'name'
   it_behaves_like 'non-authorized user'
 end

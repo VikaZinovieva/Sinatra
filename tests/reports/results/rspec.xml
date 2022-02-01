@@ -1,0 +1,30 @@
+GET/employees when valid request for employee verifies return employee by surname - ./spec/employees/api_get_employees_spec.rb:33 
+  
+          expected: "Melvin"
+          got: "Kimbery"
+          
+          (compared using ==)
+
+	PATCH/employees when invalid request for employee verifies with empty new email don't update employee - ./spec/employees/api_patch_employees_spec.rb:24 
+  
+          expected: "rosa@king.org"
+          got: "jasper_erdman@feest.com"
+          
+          (compared using ==)
+
+	POST/employees when valid request for employee verifies create employee - ./spec/employees/api_post_employees_spec.rb:23 
+  
+          expected: "jodie_harber@batz-bosco.io"
+          got: "ayesha_kuphal@wolff.net"
+          
+          (compared using ==)
+
+Finished in 7.16 seconds.
+
+Total examples 155
+
+Failed examples 3
+
+Pending examples 0
+
+Passed examples 152

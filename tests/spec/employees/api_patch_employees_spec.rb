@@ -6,7 +6,9 @@ RSpec.describe 'PATCH/employees' do
   let(:api_client) { ApiClient.new }
   let(:random_employee) { JSON.parse(ApiClient.new.company_request(endpoint: 'employees').body).sample }
 
-  context 'when valid  request' do
+  before(:all) { EmployeeHelper.new.post_employee }
+
+  context 'when valid request for employee' do
     it 'verifies update employee returns status code 200' do
       update_surname = Faker::Name.first_name
       patch_response = api_client.company_request(type_request: :patch, endpoint: 'employees', parameter: random_employee['surname'], body_opts: { "surname": update_surname })
@@ -17,7 +19,7 @@ RSpec.describe 'PATCH/employees' do
     end
   end
 
-  context 'when invalid request' do
+  context 'when invalid request for employee' do
     %w(name surname email).each do |data|
       it "verifies with empty new #{data} don't update employee" do
         api_client.company_request(type_request: :patch, endpoint: 'employees', parameter: random_employee['surname'], body_opts: { "#{data}": "" })
