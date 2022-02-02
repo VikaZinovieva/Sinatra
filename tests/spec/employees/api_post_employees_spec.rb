@@ -4,11 +4,13 @@ require 'faker'
 
 RSpec.describe 'POST/employees' do
   let(:api_client) { ApiClient.new }
-  employee = JSON.parse(ApiClient.new.company_request(endpoint: 'employees').body).sample
+
+  before(:all) { EmployeeHelper.new.post_employee }
+
   location = JSON.parse(ApiClient.new.company_request(endpoint: 'locations').body).sample
   project = JSON.parse(ApiClient.new.company_request(endpoint: 'projects').body).sample
 
-  context 'when valid  request' do
+  context 'when valid request for employee' do
     random_valid_body = {
       "name": Faker::Name.first_name,
       "surname": Faker::Name.last_name,
@@ -31,16 +33,17 @@ RSpec.describe 'POST/employees' do
     end
   end
 
-  context 'when invalid post request' do
+  context 'when invalid post request for employee' do
     first_location_id= JSON.parse(ApiClient.new.company_request(endpoint: 'locations').body).map { |elem| elem['id'] }.first
     first_project_id  = JSON.parse(ApiClient.new.company_request(endpoint: 'projects').body).map { |elem| elem['id'] }.first
-    [{ test_type: 'all credentials are presented except email', name: Faker::Name.first_name, surname: Faker::Name.last_name, position: Faker::Job.title, id_location_id: location['id'], id_project_id: project['id'] },
-     { test_type: 'all credentials are presented except name', surname: Faker::Name.last_name, position: Faker::Job.title, email: Faker::Internet.email, id_location_id: location['id'], id_project_id: project['id'] },
-     { test_type: 'all credentials are presented except surname', name: Faker::Name.first_name, position: Faker::Job.title, email: Faker::Internet.email, id_location_id: location['id'], id_project_id: project['id'] },
-     { test_type: 'all credentials are presented except surname', name: Faker::Name.first_name, position: Faker::Job.title, email: employee['email'], id_location_id: location['id'], id_project_id: project['id'] },
+    employee = JSON.parse(ApiClient.new.company_request(endpoint: 'employees').body).sample
+    [{ test_type: 'all credentials are presented except email', name: Faker::Name.first_name, surname: Faker::Name.last_name, email: '', position: Faker::Job.title, id_location_id: location['id'], id_project_id: project['id'] },
+     { test_type: 'all credentials are presented except name', name: '', surname: Faker::Name.last_name, position: Faker::Job.title, email: Faker::Internet.email, id_location_id: location['id'], id_project_id: project['id'] },
+     { test_type: 'all credentials are presented except surname', name: Faker::Name.first_name, surname: '', position: Faker::Job.title, email: Faker::Internet.email, id_location_id: location['id'], id_project_id: project['id'] },
      { test_type: 'all credentials are presented except id_location_id ', name: Faker::Name.first_name, position: Faker::Job.title, email: Faker::Internet.email, id_location_id: '', id_project_id: project['id'] },
      { test_type: 'all credentials are presented except id_project_id', name: Faker::Name.first_name, position: Faker::Job.title, email: Faker::Internet.email, id_location_id: location['id'], id_project_id: '' },
-     { test_type: 'all credentials are presented,invalid id_location_id and id_project_id', name: Faker::Name.first_name, surname: Faker::Name.last_name, position: Faker::Job.title, email: Faker::Internet.email, id_location_id: Random.new.rand(1...first_location_id), id_project_id: Random.new.rand(1...first_project_id) }
+     { test_type: 'all credentials are presented,invalid id_location_id and id_project_id', name: Faker::Name.first_name, surname: Faker::Name.last_name, position: Faker::Job.title, email: Faker::Internet.email, id_location_id: Random.new.rand(1...first_location_id), id_project_id: Random.new.rand(1...first_project_id) },
+     { test_type: 'all credentials are presented,duplicate email', name: Faker::Name.first_name, surname: Faker::Name.last_name, position: Faker::Job.title, email: employee['email'], id_location_id: Random.new.rand(1...first_location_id), id_project_id: Random.new.rand(1...first_project_id) }
     ].each do |data|
       it "verifies with #{data[:test_type]} employee wasn't created in database" do
         all_employees_before_post = JSON.parse(api_client.company_request(endpoint: 'employees').body)

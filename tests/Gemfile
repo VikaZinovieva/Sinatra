@@ -1,0 +1,13 @@
+source 'https://rubygems.org'
+
+gem "rake"
+gem "pry"
+gem "faraday", "~> 1.0"
+gem "securerandom"
+gem "faker"
+gem "parallel_tests"
+gem "rspec-core"
+gem "rspec"
+gem "faraday_middleware", "1.2.0"
+gem "rspec_junit_formatter"
+gem "rspec-legacy_formatters"

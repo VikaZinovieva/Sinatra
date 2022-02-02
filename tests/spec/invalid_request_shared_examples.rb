@@ -1,6 +1,6 @@
 require_relative 'spec_helper'
 
-RSpec.shared_examples 'invalid get request' do |endpoint|
+RSpec.shared_examples 'invalid get request', :get do |endpoint|
   { empty_id: '',
     non_exist_id: Random.new.rand(1..38),
     random_name: SecureRandom.hex(10),
