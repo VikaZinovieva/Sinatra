@@ -4,9 +4,7 @@ require 'parallel_tests/tasks'
 require 'rake'
 require 'parallel_tests/cli'
 
-RSpec::Core::RakeTask.new(:all_spec) do |t|
-  t.pattern = Dir.glob('spec/**/*_spec.rb')
-end
+RSpec::Core::RakeTask.new(:all_spec) { |t| t.pattern = Dir.glob('spec/**/*_spec.rb') }
 
 RSpec::Core::RakeTask.new(:parallel_get_tests) do |t|
   rspec_args = ['-t', 'rspec']
@@ -29,10 +27,4 @@ multitask :all_tests => all_tasks
 
 RSpec::Core::RakeTask.new(:get_location) do |t|
   t.pattern = Dir.glob('spec/locations/api_get_locations_spec.rb')
-end
-
-task :parallel_rspec do |t, args|
-  rspec_args = ['-t', 'rspec', '-n3']
-  Dir.glob("spec/**/api_get_*_spec.rb").each { |f| rspec_args << f }
-  ParallelTests::CLI.new.run(rspec_args)
 end

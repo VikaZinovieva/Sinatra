@@ -32,13 +32,14 @@ class RspecFormatter
 
   def examples_output(notification, example_type)
     unless notification.send("#{example_type}_examples").empty?
-      failed_examples_output = notification.send("#{example_type}_examples").map { |example| example_output example }
-      build_examples_output(failed_examples_output, example_type)
+      examples_output = notification.send("#{example_type}_examples").map { |example| example_output example }
+      failed_examples_output = examples_output.insert(0, "#{example_type.upcase}:")
+      build_examples_output(failed_examples_output)
     end
   end
 
-  def build_examples_output(output, example_type)
-    output.join("\n#{example_type}:\n".upcase!)
+  def build_examples_output(output)
+    output.join("\n\n\t")
   end
 
   def example_output(example)
@@ -53,6 +54,6 @@ class RspecFormatter
   end
 
   def add_spaces n
-    " " * n
+    '' * n
   end
 end
