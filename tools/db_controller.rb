@@ -72,7 +72,7 @@ class DBController
       self.delete_in(Employees, opts)
     end
 
-    private
+    # private
 
     def delete_in(table, opts)
       data = table.where(opts)

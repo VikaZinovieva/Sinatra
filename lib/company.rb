@@ -105,11 +105,11 @@ patch '/projects/:name' do
   end
 end
 
-patch '/employees/:surname' do
+patch '/employees/:email' do
   begin
     request = Rack::Request.new env
     body = JSON.parse(request.body.read).transform_keys(&:to_sym)
-    DBController.edit_employee({ surname: params['surname'] }, body)
+    DBController.edit_employee({ email: params['email'] }, body)
     status 200
   rescue StandardError => e
     body "Employee' Surname Not Updated #{e.message}"
@@ -117,9 +117,9 @@ patch '/employees/:surname' do
   end
 end
 
-delete '/employees/:surname' do
+delete '/employees/:email' do
   begin
-    DBController.delete_employee({ surname: params['surname'] })
+    DBController.delete_employee({ email: params['email'] })
     status 200
   rescue NoMethodError => e
     body "Employee Not Deleted #{e.message}"

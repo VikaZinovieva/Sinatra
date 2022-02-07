@@ -11,21 +11,20 @@ RSpec.describe 'POST/employees' do
   project = JSON.parse(ApiClient.new.company_request(endpoint: 'projects').body).sample
 
   context 'when valid request for employee' do
-    random_valid_body = {
-      "name": Faker::Name.first_name,
-      "surname": Faker::Name.last_name,
-      "email": Faker::Internet.email,
-      "position": Faker::Job.title,
-      "id_location_id": location['id'],
-      "id_project_id": project['id']
-    }
+    let(:random_valid_body) { { "name": Faker::Name.first_name,
+                                "surname": Faker::Name.last_name,
+                                "email": Faker::Internet.email,
+                                "position": Faker::Job.title,
+                                "id_location_id": location['id'],
+                                "id_project_id": project['id']
+    } }
 
     it 'verifies create employee' do
       new_employee = api_client.company_request(type_request: :post, endpoint: 'employees', body_opts: random_valid_body)
-      response = api_client.company_request(endpoint: 'employees', body_opts: { "surname": random_valid_body[:surname] })
+      response = api_client.company_request(endpoint: 'employees', body_opts: { "email": random_valid_body[:email] })
       posted_employee = JSON.parse(response.body)
       expect(new_employee.status).to eq(200)
-      expect(posted_employee['email']).to eq(random_valid_body[:email])
+      expect(posted_employee['surname']).to eq(random_valid_body[:surname])
       expect(posted_employee['name']).to eq(random_valid_body[:name])
       expect(posted_employee['surname']).to eq(random_valid_body[:surname])
       expect(posted_employee['id_location_id']).to eq(random_valid_body[:id_location_id])

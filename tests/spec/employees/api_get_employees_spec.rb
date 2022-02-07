@@ -4,11 +4,11 @@ require 'securerandom'
 RSpec.shared_examples 'invalid get request for employee' do |find_by|
   random_employee = JSON.parse(ApiClient.new.company_request(endpoint: 'employees').body).sample
 
-  before(:all) { ApiClient.new.company_request(endpoint: 'employees', type_request: :delete, parameter: random_employee['surname']) }
+  before(:all) { ApiClient.new.company_request(endpoint: 'employees', type_request: :delete, parameter: random_employee['email']) }
 
   [{ test_type: "non-exist #{find_by}", find_by: SecureRandom.alphanumeric(15) },
    { test_type: "empty #{find_by}", find_by: '' },
-   { test_type: 'deleted employee', find_by: random_employee['surname'] }
+   { test_type: 'deleted employee', find_by: random_employee['email'] }
   ].each do |data|
     it "verifies with #{data[:test_type]} returns status code 404" do
       response = api_client.company_request(endpoint: 'employees', body_opts: { "#{find_by}": data[:find_by] })
@@ -29,20 +29,19 @@ RSpec.describe 'GET/employees' do
       employees.each { |record| expect(record.keys).to eq(employee_keys) }
     end
 
-    %w(name surname email).each do |data|
-      it "verifies return employee by #{data}" do
+      it 'verifies return employee by email' do
         employee = employees.sample
-        response = api_client.company_request(endpoint: 'employees', body_opts: { data => employee[data] })
+        response = api_client.company_request(endpoint: 'employees', body_opts: { email: employee['email'] })
         find_employee = JSON.parse(response.body)
         expect(find_employee['surname']).to eq(employee['surname'])
         expect(find_employee['name']).to eq(employee['name'])
         expect(find_employee['email']).to eq(employee['email'])
         expect(response.status).to eq(200)
-      end
     end
   end
 
   it_behaves_like 'invalid get request for employee', 'surname'
   it_behaves_like 'invalid get request for employee', 'name'
+  it_behaves_like 'invalid get request for employee', 'email'
   it_behaves_like 'non-authorized user'
 end
