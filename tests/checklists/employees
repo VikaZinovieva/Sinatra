@@ -2,11 +2,7 @@
  Valid request:
  Verify GET/employees response include list of all employees
  Verify GET/employees returns status code 200
- Verify GET/employees by name in response include information of employee(id, name, surname, email, id location, id project)
- Verify GET/employees by surname in response are required information of employee(id, name, surname, email, id location, id project)
  Verify GET/employees by email in response are required information of employee(id, name, surname, email, id location, id project)
- Verify GET/employees by name returns status code 200
- Verify GET/employees by surname returns status code 200
  Verify GET/employees by email returns status code 200
 
  Invalid request:
@@ -59,34 +55,35 @@
 
  3.PATCH Method
  Valid request:
- Verify PATCH/employees/:surname for authorized user with surname updates employee and returns status code 200
- Verify PATCH/employees/:surname for authorized user with name updates employee and returns status code 200
- Verify PATCH/employees/:surname for authorized user with email updates employee and returns status code 200
- Verify PATCH/employees/:surname for authorized user with id_location_id updates employee and returns status code 200
- Verify PATCH/employees/:surname for authorized user with id_project_id updates employee and returns status code 200
+ Verify PATCH/employees/:email for authorized user with surname updates employee and returns status code 200
+ Verify PATCH/employees/:email for authorized user with name updates employee and returns status code 200
+ Verify PATCH/employees/:email for authorized user with email updates employee and returns status code 200
+ Verify PATCH/employees/:email for authorized user with id_location_id updates employee and returns status code 200
+ Verify PATCH/employees/:email for authorized user with id_project_id updates employee and returns status code 200
 
  Invalid request:
- Verify PATCH/employees/:surname for authorized user with empty name doesn't update employee
- Verify PATCH/employees/:surname for authorized user with empty surname doesn't update employee
- Verify PATCH/employees/:surname for authorized user with empty email doesn't update employee
- Verify PATCH/employees/:surname for authorized user with empty id_location_id doesn't update employee
- Verify PATCH/employees/:surname for authorized user with empty id_project_id doesn't update employee
- Verify PATCH/employees/:surname for authorized user with non-exist surname with name doesn't update employee and returns status code 400
- Verify PATCH/employees/:surname for non-authorized user doesn't update employee and returns status code 401
- Verify PATCH/employees/:surname for user with valid username and invalid password doesn't update employee and returns status code 401
- Verify PATCH/employees/:surname for user with invalid username and valid password doesn't update employee and returns status code 401
- Verify PATCH/employees/:surname for user with invalid username and password doesn't update employee and returns status code 401
- Verify PATCH/employees/:surname for user with swapped username and password doesn't update employee and returns status code 401
+ Verify PATCH/employees/:email for authorized user with empty name doesn't update employee
+ Verify PATCH/employees/:email for authorized user with empty surname doesn't update employee
+ Verify PATCH/employees/:email for authorized user with empty email doesn't update employee
+ Verify PATCH/employees/:email for authorized user with empty id_location_id doesn't update employee
+ Verify PATCH/employees/:email for authorized user with empty id_project_id doesn't update employee
+ Verify PATCH/employees/:email for authorized user with non-exist id_location_id doesn't update employee and returns status code 400
+ Verify PATCH/employees/:email for authorized user with non-exist id_project_id doesn't update employee and returns status code 400
+ Verify PATCH/employees/:email for non-authorized user doesn't update employee and returns status code 401
+ Verify PATCH/employees/:email for user with valid username and invalid password doesn't update employee and returns status code 401
+ Verify PATCH/employees/:email for user with invalid username and valid password doesn't update employee and returns status code 401
+ Verify PATCH/employees/:email for user with invalid username and password doesn't update employee and returns status code 401
+ Verify PATCH/employees/:email for user with swapped username and password doesn't update employee and returns status code 401
 
 4.DELETE Method
  Valid request:
- Verify DELETE/employees/:surname for authorized user deletes employee
- Verify DELETE/employees/:surname for authorized user responce returns status code 200
+ Verify DELETE/employees/:email for authorized user deletes employee
+ Verify DELETE/employees/:email for authorized user responce returns status code 200
 
  Invalid request:
- Verify DELETE/employees/:surname for authorized user with surname non-exist in database status code 400
- Verify DELETE/employees/:surname for non-authorized user returns status code 401
- Verify DELETE/employees/:surname for user with valid username and invalid password returns status code 401
- Verify DELETE/employees/:surname for user with invalid username and valid password returns status code 401
- Verify DELETE/employees/:surname for user with invalid username and invalid password returns status code 401
- Verify DELETE/employees/:surname for user with swapped username and password surname returns status code 401
+ Verify DELETE/employees/:email for authorized user with surname non-exist in database status code 400
+ Verify DELETE/employees/:email for non-authorized user returns status code 401
+ Verify DELETE/employees/:email for user with valid username and invalid password returns status code 401
+ Verify DELETE/employees/:email for user with invalid username and valid password returns status code 401
+ Verify DELETE/employees/:email for user with invalid username and invalid password returns status code 401
+ Verify DELETE/employees/:email for user with swapped username and password surname returns status code 401

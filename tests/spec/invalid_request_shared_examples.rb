@@ -33,7 +33,7 @@ RSpec.shared_examples 'invalid post request' do |endpoint|
   end
 end
 
-RSpec.shared_examples 'invalid patch request' do |endpoint, parameter| #parameter = name or description
+RSpec.shared_examples 'invalid patch request' do |endpoint, parameter|
   { less_5_symbols: SecureRandom.alphanumeric(4),
     more_1000_symbols: SecureRandom.alphanumeric(1001),
     empty: ''
@@ -60,10 +60,10 @@ RSpec.shared_examples 'invalid delete request' do |endpoint|
     expect(response.reason_phrase).to eq('Bad Request')
   end
 
-  it "verifies delete #{endpoint} name and new_name are same returns status code 500" do
+  it "verifies delete #{endpoint} name and new_name are same doesn't delete record" do
     response = api_client.company_request(endpoint: endpoint, parameter: employee[id_parameter_id ])
     name_for_delete = JSON.parse(response.body)['name']
     deleted_record = api_client.company_request(endpoint: endpoint, type_request: :delete, parameter: name_for_delete, body_opts: { "new_name": name_for_delete} )
-    expect(deleted_record.status).to eq(500)
+    expect(deleted_record.body.include?("#{endpoint.capitalize.chomp('s')} Not Deleted")).to be true
   end
 end
